@@ -38,8 +38,8 @@ public class User {
 	@OneToMany(mappedBy = "user")
 	private List<Car> cars;
 
-	@OneToMany(mappedBy = "user")
-	private List<CarBidding> bidding;
+	@OneToMany(mappedBy = "bidder")
+	private List<Car> bidding;
 
 	@OneToMany(mappedBy = "user")
 	private List<TestDrive> testDrives;
@@ -49,7 +49,7 @@ public class User {
 	}
 
 	public User(Long id, String username, String password, UserProfile profile, List<Role> roles, List<Car> cars,
-			List<CarBidding> bidding, List<TestDrive> testDrives) {
+			List<Car> bidding, List<TestDrive> testDrives) {
 		this.id = id;
 		this.username = username;
 		this.password = password;
@@ -107,21 +107,21 @@ public class User {
 	public void setCars(List<Car> cars) {
 		this.cars = cars;
 	}
-
-	public List<CarBidding> getBidding() {
-		return bidding;
-	}
-
-	public void setBidding(List<CarBidding> bidding) {
-		this.bidding = bidding;
-	}
-
+	
 	public List<TestDrive> getTestDrives() {
 		return testDrives;
 	}
 
 	public void setTestDrives(List<TestDrive> testDrives) {
 		this.testDrives = testDrives;
+	}
+
+	public List<Car> getBidding() {
+		return bidding;
+	}
+
+	public void setBidding(List<Car> bidding) {
+		this.bidding = bidding;
 	}
 	
 	

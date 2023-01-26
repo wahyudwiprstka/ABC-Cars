@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1" isELIgnored="false"%>
+<%@ include file="init.jsp"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
@@ -9,6 +10,8 @@
 	<title>Registration Page</title>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<link rel="stylesheet" href="/css/style.css">
 	<style>
 		body{
 			background-image: url("images/bg.svg");
@@ -44,9 +47,9 @@
 </head>
 <body>
 
-	<%@ include file="nav.jsp" %>
+	<%@ include file="component/nav.jsp" %>
 
-	<div class="regis container d-flex align-items-center justify-content-center">
+	<div class="regis container d-flex align-items-center justify-content-center rounded content">
 		<div>
 			<form:form modelAttribute="registration" class="d-flex flex-column justify-content-center registration-form" action="registrationProcess">
 				<h3 class="text-center">Registration</h3>
@@ -85,6 +88,8 @@
 			</form:form>
 		</div>
 	</div>
+
+	<%@ include file="component/footer.jsp" %>
 
 </body>
 </html>

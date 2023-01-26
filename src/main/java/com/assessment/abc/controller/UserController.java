@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,10 +15,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.assessment.abc.entity.Car;
 import com.assessment.abc.entity.Registration;
 import com.assessment.abc.entity.Role;
 import com.assessment.abc.entity.User;
 import com.assessment.abc.entity.UserProfile;
+import com.assessment.abc.service.CarService;
 import com.assessment.abc.service.ProfileService;
 import com.assessment.abc.service.RoleService;
 import com.assessment.abc.service.UserService;
@@ -28,6 +33,9 @@ public class UserController {
 	
 	@Autowired
 	ProfileService profileService;
+
+	@Autowired
+	CarService carService;
 	
 	@Autowired
 	RoleService roleService;
@@ -70,13 +78,20 @@ public class UserController {
 	
 	@GetMapping("/login")
 	public ModelAndView login() {
-		ModelAndView mav = new ModelAndView("login");
+		ModelAndView mav = new ModelAndView("redirect:/");
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {
+            mav.setViewName("/login");
+        }
+ 
 		return mav;
 	}
 	
 	@GetMapping("/profile")
-	public ModelAndView profile() {
+	public ModelAndView profile(@AuthenticationPrincipal UserDetails userDetails) {
 		ModelAndView mav = new ModelAndView("profile");
+		User user = userService.getByUsername(userDetails.getUsername());
+		mav.addObject("user", user);
 		return mav;
 	}
 	
@@ -86,7 +101,6 @@ public class UserController {
 		User user = userService.getByUsername(userDetails.getUsername());
 		UserProfile profile = user.getProfile();
 		mav.addObject("profile", profile);
-		System.out.println(user);
 		return mav;
 	}
 
@@ -99,5 +113,26 @@ public class UserController {
 		profileService.save(profile);
 		return mav;
 	}
+
+	@GetMapping("/bidding-list")
+	public ModelAndView biddingList(@AuthenticationPrincipal UserDetails userDetails) throws Exception{
+		ModelAndView mav = new ModelAndView("bidding-list");
+		User user = userService.getByUsername(userDetails.getUsername());
+		List<Car> myBid = new ArrayList<>();
+		List<Car> cars = carService.listActiveCars();
+		try{
+			for(int i = 0; i < cars.size(); i++){
+				if(cars.get(i).getBidder().getId() == user.getId()){
+					myBid.add(cars.get(i));
+				}
+			}
+			mav.addObject("myBid", myBid);
+		}catch(Exception e){
+			mav.setViewName("redirect:/cars");
+		}
+		return mav;
+	}
+
+	
 	
 }

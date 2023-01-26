@@ -14,11 +14,21 @@ import com.assessment.abc.entity.Car;
 public interface CarRepository extends JpaRepository<Car, Long> {
     
     @Query(value = "SELECT * FROM car WHERE " +
-        "make LIKE %:keyword% OR " +
-        "model LIKE %:keyword% OR " +
-        "year LIKE %:keyword%", nativeQuery = true)
+        "CONCAT_WS(' ', make, model, year) LIKE %:keyword% AND status = '1'", nativeQuery = true)
     List<Car> searchCarByKeyword(@Param("keyword") String keyword);
 
+    @Query(value = "SELECT * FROM car WHERE " +
+        "status = '1' AND (price >= :min OR price <= :max)",nativeQuery = true)
+    List<Car> searchCarByPriceRange(@Param("min") Long min, @Param("max") Long max);
 
+    @Query(value = "SELECT * FROM car WHERE user_id = :keyword", nativeQuery = true)
+    List<Car> findByUserId(@Param("keyword") Long keyword);
+
+    @Query(value = "SELECT * FROM car WHERE status = 1", nativeQuery = true)
+    List<Car> findActiveCars();
+
+    Car findCarById(Long id);
+
+    Car findTopByOrderByIdDesc();
 
 }

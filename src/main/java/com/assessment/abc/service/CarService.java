@@ -6,6 +6,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.assessment.abc.entity.Car;
 import com.assessment.abc.repository.CarRepository;
@@ -35,6 +36,26 @@ public class CarService {
 
 	public List<Car> searchByKeyword(String keyword){
 		return repo.searchCarByKeyword(keyword);
+	}
+
+	public List<Car> searchByPriceRange(Long min, Long max){
+		return repo.searchCarByPriceRange(min, max);
+	}
+
+	public List<Car> listByUserId(Long userId){
+		return repo.findByUserId(userId);
+	}
+
+	public List<Car> listActiveCars(){
+		return repo.findActiveCars();
+	}
+
+	public Car findCarById(Long id){
+		return repo.findCarById(id);
+	}
+
+	public Car getLastCar(){
+		return repo.findTopByOrderByIdDesc();
 	}
 	
 }

@@ -2,7 +2,10 @@ package com.assessment.abc.entity;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -20,13 +23,18 @@ public class Car {
     private String model;
     private String year;
     private Long price;
+    private String image;
+    private int status = 1;
+    @Column(name = "bidprice", nullable = true)
+    private long bidprice;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "car")
-    private List<CarBidding> bidding;
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "bidder")
+    private User bidder;
 
     @OneToMany(mappedBy = "car")
     private List<TestDrive> testDrives;
@@ -34,15 +42,18 @@ public class Car {
     public Car() {
     }
 
-    public Car(Long id, String make, String model, String year, Long price, User user, List<CarBidding> bidding,
-            List<TestDrive> testDrives) {
+    public Car(Long id, String make, String model, String year, Long price, String image, int status, long bidprice,
+            User user, User bidder, List<TestDrive> testDrives) {
         this.id = id;
         this.make = make;
         this.model = model;
         this.year = year;
         this.price = price;
+        this.image = image;
+        this.status = status;
+        this.bidprice = bidprice;
         this.user = user;
-        this.bidding = bidding;
+        this.bidder = bidder;
         this.testDrives = testDrives;
     }
 
@@ -94,14 +105,6 @@ public class Car {
         this.user = user;
     }
 
-    public List<CarBidding> getBidding() {
-        return bidding;
-    }
-
-    public void setBidding(List<CarBidding> bidding) {
-        this.bidding = bidding;
-    }
-
     public List<TestDrive> getTestDrives() {
         return testDrives;
     }
@@ -109,6 +112,39 @@ public class Car {
     public void setTestDrives(List<TestDrive> testDrives) {
         this.testDrives = testDrives;
     }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public User getBidder() {
+        return bidder;
+    }
+
+    public void setBidder(User bidder) {
+        this.bidder = bidder;
+    }
+
+    public long getBidprice() {
+        return bidprice;
+    }
+
+    public void setBidprice(long bidprice) {
+        this.bidprice = bidprice;
+    }
+    
     
 
 }

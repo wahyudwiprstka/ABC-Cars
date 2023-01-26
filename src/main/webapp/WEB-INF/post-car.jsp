@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1" isELIgnored="false"%>
+<%@ include file="init.jsp"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
@@ -9,6 +10,8 @@
 	<title>Registration Page</title>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<link rel="stylesheet" href="/css/style.css">
 	<style>
 		body{
 			background-image: url("images/bg.svg");
@@ -21,7 +24,7 @@
 		input.form-control{
 			width: 30vw;
 		}
-		.registration-form input.name{
+		.postcar-form input.name{
 			width: 14vw;
 		}
 		.btn-regis{
@@ -44,47 +47,38 @@
 </head>
 <body>
 
-	<%@ include file="nav.jsp" %>
+	<%@ include file="component/nav.jsp" %>
 
-	<div class="regis container d-flex align-items-center justify-content-center">
+	<div class="regis container d-flex align-items-center justify-content-center content">
 		<div>
-			<form:form modelAttribute="registration" class="d-flex flex-column justify-content-center registration-form" action="registrationProcess">
-				<h3 class="text-center">Registration</h3>
-				<div class="form-group d-flex">
-					<div style="margin-right: 2vw">
-						<label for="firstname">First Name</label>
-						<input type="text" class="form-control name" id="firstname" name="firstname">
-					</div>
-					<div>
-						<label for="lastname">Last Name</label>
-						<input type="text" class="form-control name" id="lastname" name="lastname">
-					</div>
+			<form:form modelAttribute="postCar" class="d-flex flex-column justify-content-center postcar-form" action="postCarProcess" enctype="multipart/form-data" method="post">
+				<h3 class="text-center">Post Car</h3>
+				<div class="form-group">
+					<label for="make">Make</label>
+					<input type="text" class="form-control" id="make" name="make">
 				</div>
 				<div class="form-group">
-					<label for="address">Address</label>
-					<input type="text" class="form-control" id="address" name="address">
+					<label for="model">Model</label>
+					<input type="text" class="form-control" id="model" name="model">
 				</div>
 				<div class="form-group">
-					<label for="contact">Contact</label>
-					<input type="text" class="form-control" id="contact" name="contact">
+					<label for="year">Year</label>
+					<input type="text" class="form-control" id="year" name="year">
 				</div>
 				<div class="form-group">
-					<label for="username">Username</label>
-					<input type="text" class="form-control" id="username" name="username">
+					<label for="price">Price</label>
+					<input type="text" class="form-control" id="price" name="price">
 				</div>
 				<div class="form-group">
-					<label for="password">Password</label>
-					<input type="password" class="form-control" id="password" name="password">
-				</div>
-				<div class="form-group">
-					<label for="confirm-password">Confirm Password</label>
-					<input type="password" class="form-control" id="confirm-password" name="confirm_password">
+					<label for="upload-imamge">Image</label>
+					<input type="file" class="form-control" id="upload-image" name="image" accept="image/png, image/jpeg">
 				</div>
 				<button type="submit" class="btn btn-primary btn-regis">Submit</button>
-				<a class="mt-3 text-decoration-none text-center" href="${pageContext.request.contextPath}/login">Already have an account?</a>
 			</form:form>
 		</div>
 	</div>
+
+	<%@ include file="component/footer.jsp" %>
 
 </body>
 </html>

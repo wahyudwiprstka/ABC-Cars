@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -31,29 +30,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests()
-			.antMatchers("/registration").permitAll()
-			.antMatchers("/registrationProcess").permitAll()
-			.antMatchers("/images/**", "/css/**", "/js/**").permitAll()
-			.anyRequest().fullyAuthenticated()
+		http.csrf().disable()
+			.authorizeRequests().antMatchers("/login").permitAll()
 			.and()
 			.formLogin()
-			.loginPage("/login")
-			.failureUrl("/login?error=true")
-			.permitAll()
+			.loginPage("/login").permitAll()
 			.and()
 			.logout().invalidateHttpSession(true)
 			.clearAuthentication(true)
-			.logoutRequestMatcher(new AntPathRequestMatcher("/logout")).permitAll();
+			.logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
+
+		http.authorizeRequests()
+			.antMatchers("/update-profile").hasAnyRole("USER", "ADMIN")
+			.antMatchers("/post-car").hasRole("USER")
+			.antMatchers("/post-car-list").hasAnyRole("USER", "ADMIN");
 	}
-	
-	@Override
-	public void configure(WebSecurity web) throws Exception {
-		web
-			.ignoring()
-			.antMatchers("/css/**", "/js/**");
-	}
-
-
-
 }

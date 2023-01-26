@@ -1,0 +1,10 @@
+.img-fluid{
+    border-radius: 10px;
+}
+p{
+    font-size: large;
+}
+div.abt-top p{
+    font-size: x-large;
+    font-weight: 500;
+}
