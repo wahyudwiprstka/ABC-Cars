@@ -42,8 +42,11 @@ public class UserController {
 	
 	@GetMapping("/registration")
 	public ModelAndView registration() {
-		ModelAndView mav = new ModelAndView("register");
-		
+		ModelAndView mav = new ModelAndView("redirect:/");
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if(auth == null || auth instanceof AnonymousAuthenticationToken){
+			mav.setViewName("register");
+		}
 		return mav;
 	}
 	

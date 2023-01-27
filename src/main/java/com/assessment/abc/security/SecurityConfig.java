@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.assessment.abc.service.UserDetailsServiceImpl;
@@ -41,8 +42,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 			.logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
 
 		http.authorizeRequests()
+			.antMatchers("/registration", "/registrationProcess, /login").anonymous()
 			.antMatchers("/update-profile").hasAnyRole("USER", "ADMIN")
 			.antMatchers("/post-car").hasRole("USER")
 			.antMatchers("/post-car-list").hasAnyRole("USER", "ADMIN");
+			
 	}
 }
