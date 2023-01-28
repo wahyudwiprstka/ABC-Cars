@@ -20,36 +20,39 @@
 	<%@ include file="component/nav.jsp" %>
 
 	<div class="container content">
-		<h1 class="my-3 text-center">Your Bid</h1>
+		<h1 class="my-3 text-center">Your Test Drive Request</h1>
 		<table border="1" class="table table-striped text-center">
 			<tr>
-				<th>Car Name</th>
-				<th>Car Year</th>
-				<th>Car Image</th>
-                <th>Car Seller</th>
-				<th>Bid Amount</th>
-				<th>Bid Status</th>
+				<th>Make</th>
+				<th>Model</th>
+				<th>Seller</th>
+				<th>Test Drive Date</th>
+				<th>Status</th>
 			</tr>
-			<c:forEach var="bid" items="${cars}">
+			<c:forEach var="tdrive" items="${testDrives}">
 				<tr>
-					<td>${bid.make} ${bid.model}</td>
-                    <td>${bid.year}</td>
-                    <td><img src="/images/carImg/${bid.image}" style="height: 50px;"></td>
-                    <td>${bid.bidder.username}</td>
-                    <td>${bid.bidprice}</td>
-					<c:choose>
-						<c:when test="${bid.status==2}">
-							<td>Sold To You</td>
-						</c:when>
-						<c:when test="${bid.status==1}">
-							<td>On Progress</td>
-						</c:when>
-					</c:choose>
+					<td>${tdrive.car.make}</td>
+					<td>${tdrive.car.model}</td>
+					<td>${tdrive.car.user.username}</td>
+					<td>${tdrive.date}</td>
+					<td>
+						<c:choose>
+							<c:when test="${tdrive.status==0}">
+								Waiting Approval
+							</c:when> 
+							<c:when test="${tdrive.status==1}">
+								Approved
+							</c:when>      
+							<c:otherwise>
+								Rejected
+							</c:otherwise>
+						</c:choose>
+					</td>
 				</tr>
 			</c:forEach>
-			<c:if test="${empty cars}">
+			<c:if test="${empty testDrives}">
 				<tr>
-					<td colspan="7" class="text-center">No Bid Is Available</td>
+					<td colspan="9" class="text-center">No Test Drive Available</td>
 				</tr>
 			</c:if>
 		</table>

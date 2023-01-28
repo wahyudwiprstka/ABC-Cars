@@ -16,48 +16,6 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <style> 
-	.border-box{
-		box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
-	}
-
-	.car-image {
-		width: 500px;
-		height: 250px;
-		object-fit: cover;
-	}
-
-	.car-tab {
-		margin-top: 1rem;
-		width: 71vw;
-		margin-right: 1rem
-	}
-
-	div#search{
-		position: fixed;
-		top: 5rem;
-		width: 23vw;
-		margin-left: 1.5rem;
-	}
-
-	.no-car{
-		margin-top: 1.5rem;
-	}
-
-	.btn-search{
-		width: 21vw;
-	}
-	
-	form.searchform input{
-		width: 21vw;
-		border: 1px solid #9ca3af;
-		height: 40px;
-		padding: 3px 5px;
-	}
-
-	.cartab-btn a button.btn{
-		width: 10rem;
-	}
-
     .content{
         background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1032&q=80')
     }

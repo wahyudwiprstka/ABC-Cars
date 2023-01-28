@@ -1,7 +1,5 @@
 package com.assessment.abc.entity;
 
-import java.util.List;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,7 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Car {
@@ -36,14 +34,14 @@ public class Car {
     @JoinColumn(name = "bidder")
     private User bidder;
 
-    @OneToMany(mappedBy = "car")
-    private List<TestDrive> testDrives;
+    @OneToOne(mappedBy = "car")
+    private TestDrive testDrive;
 
     public Car() {
     }
 
     public Car(Long id, String make, String model, String year, Long price, String image, int status, long bidprice,
-            User user, User bidder, List<TestDrive> testDrives) {
+            User user, User bidder, TestDrive testDrive) {
         this.id = id;
         this.make = make;
         this.model = model;
@@ -54,7 +52,7 @@ public class Car {
         this.bidprice = bidprice;
         this.user = user;
         this.bidder = bidder;
-        this.testDrives = testDrives;
+        this.testDrive = testDrive;
     }
 
     public Long getId() {
@@ -105,14 +103,6 @@ public class Car {
         this.user = user;
     }
 
-    public List<TestDrive> getTestDrives() {
-        return testDrives;
-    }
-
-    public void setTestDrives(List<TestDrive> testDrives) {
-        this.testDrives = testDrives;
-    }
-
     public String getImage() {
         return image;
     }
@@ -143,6 +133,14 @@ public class Car {
 
     public void setBidprice(long bidprice) {
         this.bidprice = bidprice;
+    }
+
+    public TestDrive getTestDrive() {
+        return testDrive;
+    }
+
+    public void setTestDrive(TestDrive testDrive) {
+        this.testDrive = testDrive;
     }
     
     

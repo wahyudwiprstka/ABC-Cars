@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.assessment.abc.entity.Car;
+import com.assessment.abc.entity.User;
 import com.assessment.abc.repository.CarRepository;
 
 @Service
@@ -43,7 +44,7 @@ public class CarService {
 	}
 
 	public List<Car> listByUserId(Long userId){
-		return repo.findByUserId(userId);
+		return repo.findCarsByUserId(userId);
 	}
 
 	public List<Car> listActiveCars(){
@@ -56,6 +57,10 @@ public class CarService {
 
 	public Car getLastCar(){
 		return repo.findTopByOrderByIdDesc();
+	}
+
+	public List<Car> findCarsByBidder(User user){
+		return repo.findCarsByBidder(user);
 	}
 	
 }

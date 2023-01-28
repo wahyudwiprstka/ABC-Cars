@@ -20,6 +20,7 @@
 	<%@ include file="component/nav.jsp" %>
 
 	<div class="container content">
+		<h1 class="my-3 text-center">Your Car Post</h1>
 		<table border="1" class="table table-striped text-center">
 			<tr>
 				<th>Make</th>
@@ -45,7 +46,10 @@
 						<c:choose>
 							<c:when test="${car.status==1}">
 								Active
-							</c:when>    
+							</c:when> 
+							<c:when test="${car.status==2}">
+								Sold
+							</c:when>      
 							<c:otherwise>
 								Inactive
 							</c:otherwise>
@@ -65,6 +69,9 @@
 										<li><a class="dropdown-item" href="manage-car-status?id=${car.id}&value=1">Activate</a></li>
 									</c:otherwise>
 								</c:choose>
+								<c:if test="${!empty car.bidder && !empty car.bidprice}">
+									<li><a class="dropdown-item" href="manage-car-status?id=${car.id}&value=2">Accept Car Bid</a></li>
+								</c:if>
 								<li><a class="dropdown-item" href="delete-car?id=${car.id}">Delete</a></li>
 							</ul>
 						</div>
@@ -73,7 +80,7 @@
 			</c:forEach>
 			<c:if test="${empty cars}">
 				<tr>
-					<td colspan="7" class="text-center">No Car Is Available</td>
+					<td colspan="9" class="text-center">No Car Is Available</td>
 				</tr>
 			</c:if>
 		</table>

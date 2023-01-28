@@ -51,7 +51,7 @@
 
 	<div class="regis container d-flex align-items-center justify-content-center content">
 		<div>
-			<form:form modelAttribute="postCar" class="d-flex flex-column justify-content-center postcar-form" action="postCarProcess" enctype="multipart/form-data" method="post">
+			<form:form name="pcForm" onsubmit="return validatePostCarForm()" modelAttribute="postCar" class="d-flex flex-column justify-content-center postcar-form" action="postCarProcess" enctype="multipart/form-data" method="post">
 				<h3 class="text-center">Post Car</h3>
 				<div class="form-group">
 					<label for="make">Make</label>
@@ -79,6 +79,8 @@
 	</div>
 
 	<%@ include file="component/footer.jsp" %>
+
+	<script src="js/postcarValidation.js"></script>
 
 </body>
 </html>

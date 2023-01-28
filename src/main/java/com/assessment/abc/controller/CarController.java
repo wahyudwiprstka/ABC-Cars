@@ -1,15 +1,17 @@
 package com.assessment.abc.controller;
 
+import java.io.File;
 import java.io.IOException;
-import java.lang.ProcessBuilder.Redirect;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -37,13 +39,13 @@ public class CarController {
     @Autowired
     UserService userService;
 
-    @GetMapping("/post-car")
+    @GetMapping("/u/post-car")
     public ModelAndView postCar(){
         ModelAndView mav = new ModelAndView("post-car");
         return mav;
     }
 
-    @PostMapping("/postCarProcess")
+    @PostMapping("/u/postCarProcess")
     public ModelAndView postCarProcess(@ModelAttribute("postCar") PostCar postCar, 
         @AuthenticationPrincipal UserDetails userDetails) throws IOException{
 
@@ -92,7 +94,7 @@ public class CarController {
         return mav;
     }
 
-    @GetMapping("/post-car-list")
+    @GetMapping("/u/post-car-list")
     public ModelAndView postCarList(){
         ModelAndView mav = new ModelAndView("post-car-list");
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -109,18 +111,29 @@ public class CarController {
     }
 
     @GetMapping("/cars")
-    public ModelAndView cars(){
+    public ModelAndView cars(@AuthenticationPrincipal UserDetails userDetails){
         ModelAndView mav = new ModelAndView("cars");
+        User user = null;
+        if(userDetails!=null){
+            user = userService.getByUsername(userDetails.getUsername());
+        }
         List<Car> cars = carService.listActiveCars();
-        // BidModel bid = carBidService.findCurrentBidPrice((long) 1);
+        if(user!=null){
+            mav.addObject("user", user);
+        }
         mav.addObject("cars", cars);
         return mav;
     }
 
     @GetMapping("/cars/search")
     public ModelAndView searchCarByKeyword(@RequestParam(value="keyword", required=false) String keyword, 
-    @RequestParam(value="min", required=false) Long min, @RequestParam(value="max", required=false) Long max){
+    @RequestParam(value="min", required=false) Long min, @RequestParam(value="max", required=false) Long max, 
+    @AuthenticationPrincipal UserDetails userDetails){
         ModelAndView mav = new ModelAndView("cars");
+        User user = null;
+        if(userDetails!=null){
+            user = userService.getByUsername(userDetails.getUsername());
+        }
         List<Car> cars;
         if(keyword!=null){
             cars = carService.searchByKeyword(keyword);
@@ -131,42 +144,53 @@ public class CarController {
         }
         
         mav.addObject("cars", cars);
+        if(user!=null){
+            mav.addObject("user", user);
+        }
         return mav;
     }
 
-
-    @GetMapping("/manage-car-status")
+    @GetMapping("/u/manage-car-status")
     public ModelAndView manageStatus(@RequestParam("id")Long id, @RequestParam("value")int value){
-        ModelAndView mav = new ModelAndView("redirect:/post-car-list");
+        ModelAndView mav = new ModelAndView("redirect:/u/post-car-list");
         Car car = carService.findCarById(id);
         car.setStatus(value);
         carService.save(car);
         return mav;
     }
 
-    @GetMapping("/delete-car")
+    @GetMapping("/u/delete-car")
     public ModelAndView deleteCar(@RequestParam("id") Long id){
-        ModelAndView mav = new ModelAndView("redirect:/post-car-list");
+        ModelAndView mav = new ModelAndView("redirect:/u/post-car-list");
         carService.delete(carService.findCarById(id));
+        File imageToDelete = new File("D:\\Dev\\abc\\src\\main\\resources\\static\\images\\carImg");
+        imageToDelete.delete();
         return mav;
     }
 
-    @GetMapping("/car-details/{id}")
-    public ModelAndView carDetails(@PathVariable("id") Long id, @RequestParam(value = "bidError", required = false) String bidError, @RequestParam(value = "bidSuccess", required = false) String bidSuccess){
+    @GetMapping("/u/car-details/{id}")
+    public ModelAndView carDetails(@PathVariable("id") Long id, @RequestParam(value = "bidError", required = false) String bidError, @RequestParam(value = "bidSuccess", required = false) String bidSuccess, @AuthenticationPrincipal UserDetails userDetails){
         ModelAndView mav = new ModelAndView("car-details");
         Car car = carService.findCarById(id);
+        User user = null;
+        if(userDetails!=null){
+            user = userService.getByUsername(userDetails.getUsername());
+        }
         mav.addObject("car", car);
         if(bidError != null && bidSuccess == null){
             mav.addObject("bidError", bidError);
         }else if(bidError == null && bidSuccess != null){
             mav.addObject("bidSuccess", bidSuccess);
         }
+        if(user!=null){
+            mav.addObject("user", user);
+        }
         return mav;
     }
 
-    @GetMapping("/car-details/{id}/bid")
+    @GetMapping("/u/car-details/{id}/bid")
     public ModelAndView bidCar(@PathVariable("id") Long id, @RequestParam("bid") Long bid, @AuthenticationPrincipal UserDetails userDetails, HttpSession session){
-        ModelAndView mav = new ModelAndView("redirect:/car-details/"+id);
+        ModelAndView mav = new ModelAndView("redirect:/u/car-details/"+id);
         Car car = carService.findCarById(id);
         User user = userService.getByUsername(userDetails.getUsername());
         if(bid > car.getBidprice() && bid > car.getPrice()){
@@ -176,6 +200,17 @@ public class CarController {
             mav.addObject("bidSuccess", "Your bid is done successfuly");
         }else{
             mav.addObject("bidError", "Your bid is lower than current bid!");
+        }
+        return mav;
+    }
+
+    @GetMapping("/u/bidding-list")
+    public ModelAndView biddingList(@AuthenticationPrincipal UserDetails userDetails){
+        ModelAndView mav = new ModelAndView("bidding-list");
+        User user = userService.getByUsername(userDetails.getUsername());
+        List<Car> cars = carService.findCarsByBidder(user);
+        if(cars != null){
+            mav.addObject("cars", cars);
         }
         return mav;
     }

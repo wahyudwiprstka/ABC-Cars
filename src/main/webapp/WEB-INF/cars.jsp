@@ -38,14 +38,9 @@
 	}
 
 	div#search{
-		margin-top: 1rem;
 		width: 23vw;
 		margin-left: 1.5rem;
 		height: 50%
-	}
-
-	.no-car{
-		margin-top: 1.5rem;
 	}
 
 	.btn-search{
@@ -68,8 +63,8 @@
 	<%@ include file="component/nav.jsp" %>
 
 	<div class="container-fluid content d-flex gap-3">
-		<div class="shadow rounded text-center py-4 float-start" id="search">
-			<a href="${pageContext.request.contextPath}/post-car" class="text-white text-decoration-none"><button class="btn btn-primary btn-search mt-3">Post Car</button></a>
+		<div class="shadow rounded text-center py-4 float-start my-2" id="search">
+			<a href="${pageContext.request.contextPath}/u/post-car" class="text-white text-decoration-none"><button class="btn btn-primary btn-search mt-3">Post Car</button></a>
 			<h6 class="fw-semibold ms-4 mt-2" style="text-align: left;">Search Car</h6>
 			<form action="${pageContext.request.contextPath}/cars/search" method="get" class="searchform">
 				<input type="text" name="keyword" id="keyword" placeholder="Input make/model/year" class="rounded">
@@ -84,8 +79,8 @@
 		</div>
 		<div class="d-flex flex-column float-end" id="cars">
 			<c:forEach var="car" items="${cars}">
-				<div class="d-flex flex-row car-tab container border-box">
-					<a href="${pageContext.request.contextPath}/car-details/${car.id}" class="d-flex text-black text-decoration-none">
+				<div class="d-flex flex-row car-tab container border-box my-2">
+					<a href="${pageContext.request.contextPath}/u/car-details/${car.id}" class="d-flex text-black text-decoration-none">
 					<img src="/images/carImg/${car.image}" class="car-image"/>
 					<div class="justify-content-between">
 						<div class="ms-3 my-2 d-flex flex-column">
@@ -99,11 +94,18 @@
 									<p>Current Bid: $${car.bidprice}</p>
 								</c:otherwise>
 							</c:choose>
-							<%-- <p>Current Bid: ${bidService.findCurrentBidPrice($car.id)}</p> --%>
+							
 						</div>
-						<div class="ms-3 my-3 d-flex flex-column cartab-btn">
-							<a href="${pageContext.request.contextPath}/car-details/${car.id}#bid" class="d-inline-block"><button type="button" class="btn btn-warning">Bid Now</button></a>
-							<a href="${pageContext.request.contextPath}/car-details/${car.id}#bid" class="d-inline-block"><button type="button" class="btn btn-primary mt-2">View Details</button></a>
+						<div class="ms-3 d-flex flex-column cartab-btn">
+							<sec:authorize access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')" var="isAuthenticated()">
+								<c:if test="${user.id != car.user.id && user.id != car.bidder.id}">
+									<a href="${pageContext.request.contextPath}/u/car-details/${car.id}#bid" class="d-inline-block"><button type="button" class="btn btn-warning">Bid Now</button></a>
+								</c:if>
+								<c:if test="${user.id == car.bidder.id}">
+									<a href="${pageContext.request.contextPath}/u/car-details/${car.id}#detailinfo" class="d-inline-block"><button type="button" class="btn btn-warning">Request Test Drive</button></a>
+								</c:if>
+							</sec:authorize>
+							<a href="${pageContext.request.contextPath}/u/car-details/${car.id}#bid"><button type="button" class="btn btn-primary mt-2">View Details</button></a>
 						</div>
 					</div>
 					</a>

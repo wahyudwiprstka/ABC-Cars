@@ -55,13 +55,12 @@
 	<%@ include file="component/nav.jsp" %>
 
 	<div class="container content">
-
 		<div class="container d-flex justify-content-center flex-column">
 			<h1 class="fw-bold">${car.make} ${car.model} ${car.year}</h1>
 			<img src="/images/carImg/${car.image}" id="carImage">
 		</div>
 	
-		<div class="bid-info container align-items-center d-flex justify-content-around my-5 p-0">
+		<div class="bid-info container align-items-center d-flex justify-content-around my-5 p-0" id="detailinfo">
 			<div class="d-flex">
 				<h3 class="green me-2">Starting Price: </h3><h3>$${car.price}</h3>
 			</div>
@@ -71,7 +70,37 @@
 			<div class="d-flex">
 				<h3 class="green me-2">Current Bidder: </h3><h3>${car.bidder.username}</h3>
 			</div>
-			<button type="button" class="btn btn-primary" onClick="document.getElementById('bid').scrollIntoView();">Place Bid</button>
+			<c:if test="${user.id == car.bidder.id}">
+				<div>
+					<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+						Request Test Drive
+					</button>
+					
+					<div class="modal fade text-black" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+						<div class="modal-dialog model-dialog-centered">
+						<div class="modal-content">
+							<div class="modal-header">
+							<h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+							</div>
+							<div class="modal-body">
+								<form id="test-drive" method="post" action="${pageContext.request.contextPath}/u/req-test-drive/${id}/process">
+									<label for="date">Input Test Drive Date</label>
+									<input type="date" id="date" name="date" class="rounded border border-secondary">
+								</form>
+							</div>
+							<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+							<button type="submit" form="test-drive" class="btn btn-primary">Save changes</button>
+							</div>
+						</div>
+						</div>
+					</div>
+				</div>
+			</c:if>
+			<c:if test="${user.id != car.bidder.id}">
+				<button type="button" class="btn btn-primary" onClick="document.getElementById('bid').scrollIntoView();">Place Bid</button>
+			</c:if>
 		</div>
 	
 		<div class="container">
@@ -88,8 +117,11 @@
 				<dd></dd>
 			</dl>
 		</div>
+
+		
 	
-		<div class="container shadow mt-5 p-4" id="bid">
+		<c:if test="${user.id != car.bidder.id}">
+		<div class="container shadow mt-5 mb-2 p-4" id="bid">
 			<p class="text-success">${bidSuccess}</p>
 			<p class="text-danger">${bidError}</p>
 			<form action="${pageContext.request.contextPath}/car-details/${car.id}/bid">
@@ -106,13 +138,14 @@
 					</c:choose>
 				</div>
 				<div class="mb-3">
-					<label for="userbid" class="form-label">Your Bid</label>
-					<input type="text" class="form-control" id="userbid" name="bid" aria-describedby="userbiddesc">
-					<div id="userbiddesc" class="form-text">The amount of bid should be greater than the current bid</div>
+						<label for="userbid" class="form-label">Your Bid</label>
+						<input type="text" class="form-control" id="userbid" name="bid" aria-describedby="userbiddesc">
+						<div id="userbiddesc" class="form-text">The amount of bid should be greater than the current bid</div>
 				</div>
 				<button type="submit" class="btn btn-primary">Submit</button>
 			</form>
 		</div>
+		</c:if>
 
 	</div>
 

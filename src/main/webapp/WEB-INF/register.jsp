@@ -49,9 +49,9 @@
 
 	<%@ include file="component/nav.jsp" %>
 
-	<div class="regis container d-flex align-items-center justify-content-center rounded content">
+	<div class="regis container d-flex align-items-center justify-content-center rounded content mb-2">
 		<div>
-			<form:form modelAttribute="registration" class="d-flex flex-column justify-content-center registration-form" action="registrationProcess">
+			<form:form name="myForm" modelAttribute="registration" class="d-flex flex-column justify-content-center registration-form" action="registrationProcess" onsubmit="return validateForm()">
 				<h3 class="text-center">Registration</h3>
 				<div class="form-group d-flex">
 					<div style="margin-right: 2vw">
@@ -90,6 +90,8 @@
 	</div>
 
 	<%@ include file="component/footer.jsp" %>
+
+	<script src="js/validation.js"></script>
 
 </body>
 </html>

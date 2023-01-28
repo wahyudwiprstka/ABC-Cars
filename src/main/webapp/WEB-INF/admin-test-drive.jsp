@@ -21,43 +21,39 @@
 	<% String userRole; %>
 
 	<div class="container d-flex flex-column align-items-center content">
-		<h1 class="mb-3">Manage Cars</h1>
+		<h1 class="mb-3">Manage Test Drive</h1>
 		<div>
 			<a href="${pageContext.request.contextPath}/admin/user" class="btn border-0 text-primary text-decoration-none">Manage User</a>
-			<a href="${pageContext.request.contextPath}/admin/car" class="btn border-0 disabled">Manage Cars</a>
-			<a href="${pageContext.request.contextPath}/admin/test-drive" class="btn border-0 text-primary text-decoration-none">Manage Test Drive</a>
+			<a href="${pageContext.request.contextPath}/admin/car" class="btn border-0 text-primary text-decoration-none">Manage Cars</a>
+			<a href="${pageContext.request.contextPath}/admin/test-drive" class="btn border-0 disabled">Manage Test Drive</a>
 		</div>
 		<table border="1" class="table table-striped text-center">
 			<tr>
 				<th>Make</th>
 				<th>Model</th>
-				<th>Price</th>
-				<th>Year</th>
-				<th>Current Bidder</th>
-				<th>Bid Price</th>
-				<th>Image</th>
+				<th>Seller</th>
+				<th>Requester</th>
+				<th>Test Drive Date</th>
 				<th>Status</th>
 				<th>Action</th>
 			</tr>
-			<c:forEach var="car" items="${cars}">
+			<c:forEach var="tdrive" items="${testDrives}">
 				<tr>
-					<td>${car.make}</td>
-					<td>${car.model}</td>
-					<td>${car.price}</td>
-					<td>${car.year}</td>
-					<td>${car.bidder.username}</td>
-					<td>${car.bidprice}</td>
-					<td><img src="/images/carImg/${car.image}" width="100px"></td>
+					<td>${tdrive.car.make}</td>
+					<td>${tdrive.car.model}</td>
+					<td>${tdrive.car.user.username}</td>
+					<td>${tdrive.user.username}</td>
+					<td>${tdrive.date}</td>
 					<td>
 						<c:choose>
-							<c:when test="${car.status==1}">
-								Active
-							</c:when>
-							<c:when test="${car.status==2}">
-								Sold
-							</c:when>       
+							<c:when test="${tdrive.status==0}">
+								Waiting Approval
+							</c:when> 
+							<c:when test="${tdrive.status==1}">
+								Approved
+							</c:when>      
 							<c:otherwise>
-								Inactive
+								Rejected
 							</c:otherwise>
 						</c:choose>
 					</td>
@@ -67,26 +63,24 @@
 								Action
 							</button>
 							<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-								<c:choose>
-									<c:when test="${car.status==1}">
-										<li><a class="dropdown-item" href="${pageContext.request.contextPath}/admin/manage-car-status?id=${car.id}&value=0">Deactivate</a></li>
-									</c:when>    
-									<c:when test="${car.status==0}">
-										<li><a class="dropdown-item" href="${pageContext.request.contextPath}/admin/manage-car-status?id=${car.id}&value=1">Activate</a></li>
-									</c:when>
-								</c:choose>
-								<c:if test="${!empty car.bidder} ${car.status != 3}">
-									<li><a class="dropdown-item" href="${pageContext.request.contextPath}/admin/manage-car-status?id=${car.id}&value=2">Accept Car Bid</a></li>
+								<c:if test="${tdrive.status==0 || tdrive.status==2}">
+									<li><a class="dropdown-item" href="${pageContext.request.contextPath}/admin/manage-testdrive-status?id=${tdrive.id}&value=1">Accept</a></li>
 								</c:if>
-								<li><a class="dropdown-item" href="${pageContext.request.contextPath}/admin/delete-car?id=${car.id}">Delete</a></li>
+								<c:if test="${tdrive.status==0 || tdrive.status==1}">
+									<li><a class="dropdown-item" href="${pageContext.request.contextPath}/admin/manage-testdrive-status?id=${tdrive.id}&value=2">Reject</a></li>
+								</c:if>
+								<c:if test="${tdrive.status==1 || tdrive.status==2}">
+									<li><a class="dropdown-item" href="${pageContext.request.contextPath}/admin/manage-testdrive-status?id=${tdrive.id}&value=0">Pending</a></li>
+								</c:if>
+								<li><a class="dropdown-item" href="${pageContext.request.contextPath}/admin/delete-testdrive?id=${tdrive.id}">Delete</a></li>
 							</ul>
 						</div>
 					</td>
 				</tr>
 			</c:forEach>
-			<c:if test="${empty cars}">
+			<c:if test="${empty testDrives}">
 				<tr>
-					<td colspan="9" class="text-center">No Car Is Available</td>
+					<td colspan="9" class="text-center">No Test Drive Request Is Available</td>
 				</tr>
 			</c:if>
 		</table>

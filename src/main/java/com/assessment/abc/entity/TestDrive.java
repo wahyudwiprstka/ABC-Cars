@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -20,20 +21,22 @@ public class TestDrive {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Date date;
+    private Long status;
     
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "car_id", nullable = false)
     private Car car;
 
     public TestDrive(){}
 
-    public TestDrive(Long id, Date date, User user, Car car) {
+    public TestDrive(Long id, Date date, Long status, User user, Car car) {
         this.id = id;
         this.date = date;
+        this.status = status;
         this.user = user;
         this.car = car;
     }
@@ -69,6 +72,15 @@ public class TestDrive {
     public void setCar(Car car) {
         this.car = car;
     }
+
+    public Long getStatus() {
+        return status;
+    }
+
+    public void setStatus(Long status) {
+        this.status = status;
+    }
+    
 
     
     

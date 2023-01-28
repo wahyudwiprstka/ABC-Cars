@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -70,7 +71,7 @@ public class UserController {
 		UserProfile savedProfile = profileService.getByContact(regis.getContact());
 		
 		user.setUsername(regis.getUsername());
-		user.setPassword(regis.getPassword());
+		user.setPassword(new BCryptPasswordEncoder().encode(regis.getPassword()));
 		user.setProfile(savedProfile);
 		user.setRoles(roles);
 		
@@ -90,7 +91,7 @@ public class UserController {
 		return mav;
 	}
 	
-	@GetMapping("/profile")
+	@GetMapping("/u/profile")
 	public ModelAndView profile(@AuthenticationPrincipal UserDetails userDetails) {
 		ModelAndView mav = new ModelAndView("profile");
 		User user = userService.getByUsername(userDetails.getUsername());
@@ -98,7 +99,7 @@ public class UserController {
 		return mav;
 	}
 	
-	@GetMapping("/update-profile")
+	@GetMapping("/u/update-profile")
 	public ModelAndView updateProfile(@AuthenticationPrincipal UserDetails userDetails) throws Exception {
 		ModelAndView mav = new ModelAndView("update-profile");
 		User user = userService.getByUsername(userDetails.getUsername());
@@ -107,32 +108,13 @@ public class UserController {
 		return mav;
 	}
 
-	@PostMapping("/update-profile-process")
+	@PostMapping("/u/update-profile-process")
 	public ModelAndView updateProfileProcess(@ModelAttribute("update-profile") UserProfile profile, @AuthenticationPrincipal UserDetails userDetails) throws Exception{
-		ModelAndView mav = new ModelAndView("redirect:/profile");
+		ModelAndView mav = new ModelAndView("redirect:/u/profile");
 		User user = userService.getByUsername(userDetails.getUsername());
 		UserProfile p = user.getProfile();
 		profile.setId(p.getId());
 		profileService.save(profile);
-		return mav;
-	}
-
-	@GetMapping("/bidding-list")
-	public ModelAndView biddingList(@AuthenticationPrincipal UserDetails userDetails) throws Exception{
-		ModelAndView mav = new ModelAndView("bidding-list");
-		User user = userService.getByUsername(userDetails.getUsername());
-		List<Car> myBid = new ArrayList<>();
-		List<Car> cars = carService.listActiveCars();
-		try{
-			for(int i = 0; i < cars.size(); i++){
-				if(cars.get(i).getBidder().getId() == user.getId()){
-					myBid.add(cars.get(i));
-				}
-			}
-			mav.addObject("myBid", myBid);
-		}catch(Exception e){
-			mav.setViewName("redirect:/cars");
-		}
 		return mav;
 	}
 

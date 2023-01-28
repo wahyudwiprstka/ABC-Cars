@@ -20,7 +20,13 @@
 	<%@ include file="component/nav.jsp" %>
 	<% String userRole; %>
 
-	<div class="container d-flex align-items-center justify-content-center content">
+	<div class="container d-flex flex-column align-items-center content">
+		<h1 class="mb-3">Manage Users</h1>
+		<div>
+			<a href="${pageContext.request.contextPath}/admin/user" class="btn border-0 disabled">Manage User</a>
+			<a href="${pageContext.request.contextPath}/admin/car" class="btn border-0 text-primary text-decoration-none">Manage Cars</a>
+			<a href="${pageContext.request.contextPath}/admin/test-drive" class="btn border-0 text-primary text-decoration-none">Manage Test Drive</a>
+		</div>
 		<table border="1" class="table table-striped text-center">
 			<tr>
 				<th>ID</th>
@@ -56,6 +62,7 @@
 									<li><a class="dropdown-item" href="delete-admin-role/${user.id}">Delete Admin Role</a></li>
 								</c:if>
 								<li><a class="dropdown-item" href="delete-user/${user.id}">Delete</a></li>
+								<li><a class="dropdown-item" href="update-user/${user.id}">Update Profile</a></li>
 							</ul>
 						</div>
 					</td>
