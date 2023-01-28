@@ -49,7 +49,7 @@
 
 	<%@ include file="component/nav.jsp" %>
 
-	<div class="regis container d-flex align-items-center justify-content-center content">
+	<div class="regis container d-flex align-items-center justify-content-center content mb-2">
 		<div>
 			<form:form name="pcForm" onsubmit="return validatePostCarForm()" modelAttribute="postCar" class="d-flex flex-column justify-content-center postcar-form" action="postCarProcess" enctype="multipart/form-data" method="post">
 				<h3 class="text-center">Post Car</h3>

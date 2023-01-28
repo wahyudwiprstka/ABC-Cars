@@ -51,9 +51,14 @@ public class UserController {
 		return mav;
 	}
 	
+	@GetMapping("/registrationTY")
+	public ModelAndView regisTy(){
+		return new ModelAndView("register-ty");
+	}
+	
 	@PostMapping("/registrationProcess")
 	public ModelAndView registrationProcess(@ModelAttribute("registration") Registration regis) {
-		ModelAndView mav = new ModelAndView("redirect:/registration");
+		ModelAndView mav = new ModelAndView("redirect:/registrationTY");
 		User user = new User();
 		UserProfile profile = new UserProfile();
 		Role role = roleService.get((long) 1);

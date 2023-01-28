@@ -17,9 +17,10 @@
 
 	<%@ include file="component/nav.jsp" %>
 
-	<div class="container d-flex flex-column align-items-center justify-content-center rounded">
+	<div class="container d-flex flex-column align-items-center justify-content-center shadow rounded content w-75">
 		<h2>Thank you</h2>
 		<h5>For registering in ABC Cars.</h5>
+		<a href="${pageContext.request.contextPath}/cars"><button class="btn btn-primary">Explore Cars</button></a>
 	</div>
 
 	<%@ include file="component/footer.jsp" %>

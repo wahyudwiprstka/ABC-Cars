@@ -19,7 +19,7 @@ public interface CarRepository extends JpaRepository<Car, Long> {
     List<Car> searchCarByKeyword(@Param("keyword") String keyword);
 
     @Query(value = "SELECT * FROM car WHERE " +
-        "status = '1' AND (price >= :min OR price <= :max)",nativeQuery = true)
+        "(price >= :min AND price <= :max) AND status = 1",nativeQuery = true)
     List<Car> searchCarByPriceRange(@Param("min") Long min, @Param("max") Long max);
 
     List<Car> findCarsByUserId(Long userId);

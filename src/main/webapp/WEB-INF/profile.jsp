@@ -26,7 +26,7 @@
         <div>
             <div class="text-center">
                 <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" class="rounded"><br>
-                <a href="${pageContext.request.contextPath}/update-profile"><button class="mt-3 btn btn-primary">Change Profile</button></a>
+                <a href="${pageContext.request.contextPath}/u/update-profile"><button class="mt-3 btn btn-primary">Change Profile</button></a>
             </div>
         </div>
         <div class="">

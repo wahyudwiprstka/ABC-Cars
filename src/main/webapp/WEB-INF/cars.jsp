@@ -113,7 +113,7 @@
 			</c:forEach>
 		</div>
 		<c:if test = "${empty cars}">
-			<h3 class="no-car ms-3 float-end me-5">No cars yet</h3>
+			<h3 class="no-car mt-2 ms-3 float-end me-5">No cars available</h3>
 		</c:if>
 		
 	</div>
